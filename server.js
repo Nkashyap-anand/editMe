@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/randomImage', (req, res) => {
-	const imagesDir = path.join(__dirname, 'images');
+	const imagesDir = path.join(__dirname, 'public/images');
 	fs.readdir(imagesDir, (err, files) => {
 		if (err) {
 			res.status(500).send('Error reading images directory.');
