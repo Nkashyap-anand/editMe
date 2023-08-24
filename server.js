@@ -25,7 +25,7 @@ app.get('/randomImage', (req, res) => {
 		const imagePath = path.join(imagesDir, randomImage);
 		const imageStream = fs.createReadStream(imagePath);
 
-		res.setHeader('Content-Type', 'image/jpeg'); // Adjust content type based on your image format
+		res.setHeader('Content-Type', 'image/png'); // Adjust content type based on your image format
 		imageStream.pipe(res);
 	});
 });
