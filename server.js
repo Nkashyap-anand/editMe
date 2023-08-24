@@ -7,10 +7,6 @@ const port = process.env.PORT || 3000; // Use process.env.PORT
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 app.get('/randomImage', (req, res) => {
 	const imagesDir = path.join(__dirname, 'public/images');
 	fs.readdir(imagesDir, (err, files) => {
@@ -23,10 +19,21 @@ app.get('/randomImage', (req, res) => {
 		const randomImage = files[randomIndex];
 
 		const imagePath = path.join(imagesDir, randomImage);
-		const imageStream = fs.createReadStream(imagePath);
 
-		res.setHeader('Content-Type', 'image/png'); // Adjust content type based on your image format
-		imageStream.pipe(res);
+		// Read the image file as binary data
+		fs.readFile(imagePath, (err, data) => {
+			if (err) {
+				res.status(500).send('Error reading image file.');
+				return;
+			}
+			const imageBuffer = Buffer.from(data);
+
+			// Set the appropriate Content-Type header
+			res.setHeader('Content-Type', 'image/png'); // Adjust content type based on your image format
+
+			// Send the binary image data as the response
+			res.send(imageBuffer);
+		});
 	});
 });
 
